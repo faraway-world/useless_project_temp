@@ -1,51 +1,63 @@
-# Thermal Volume Prank
 
-A dynamic daemon that monitors audio volume and system temperature to orchestrate an escalating series of stressful events, ending in an unkillable Rickroll lock screen.
+# Thermal Volume Daemon
+
+A Linux/Wayland daemon that physically enforces system volume limits by tying audio output to CPU temperature. 
+
+If the volume gets too loud, the daemon intentionally overheats the computer using background stress tests. If the resulting thermal warnings are ignored by user, it locks all user inputs and executes an inescapable audio-visual penalty. 
+
+An architecture for macOS is planned.
 
 ## Features
+* **Head-Tracking Volume Control:** Adjust volume by turning your head left or right using webcam tracking (OpenCV + MediaPipe).
+* **Artificial Thermal Loading:** Automatically launches `mprime` (CPU) and `glmark2` (GPU) when volume exceeds 60% to rapidly heat the chassis.
+* **Wayland-Native Overlay:** Uses GTK Layer Shell to render a critical thermal warning over all active windows.
+* **Input-Locking Trap:** If the user overrides the warning, the daemon deploys a transparent GTK wall to absorb all mouse clicks, requests Wayland exclusive keyboard mode, maxes the volume to 150%, and loops a Rickroll using `mpv`.
 
-- **Head Tracking Volume Control**: Modulate your system's audio volume just by turning your head left or right (powered by MediaPipe and OpenCV).
-- **Thermal Stressing**: If the volume goes above 60%, the script automatically spins up CPU and GPU stress tests (`mprime` and `glmark2`) to heat up the chassis.
-- **Critical Thermal Warning**: When the chassis temperature hits 85°C, a GTK-based warning overlay appears.
-- **Unkillable Rickroll**: If the warning is ignored (override is clicked or 10 seconds pass), the daemon locks the screen with a transparent input blocker and blasts a looping Rickroll at maximum volume.
-- **Kill Sequence**: The Rickroll can only be stopped by entering the secret kill sequence (`Ctrl + Super + Alt + Space`).
+## Requirements
+* **OS:** Linux (Wayland compositors. Tested on Hyprland).
+* **System Packages:** `mpv`, `mprime-bin` (AUR), `glmark2`, `gtk-layer-shell`, `python-gobject`
+* **Python Packages:** `pulsectl`, `psutil`, `opencv-python`, `mediapipe`
 
-## Prerequisites
+## Installation & Setup
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/faraway-world/thermal-volume.git](https://github.com/faraway-world/thermal-volume.git)
+   cd thermal-volume
 
-### System Requirements
-
-This project relies on some system-level binaries and libraries for its functions. You will need to install the following on your Linux system:
-
-- **GTK 3 & GTK Layer Shell**: For drawing the warning overlay and lock screen.
-- **mprime & glmark2**: For stressing the CPU and GPU.
-- **mpv**: For playing the Rickroll video (`rickroll.mp4`).
-
-Example for Arch-based systems:
-```bash
-sudo pacman -S gtk3 gtk-layer-shell mprime glmark2 mpv
 ```
 
-### Python Dependencies
-
-The required Python packages are listed in `requirements.txt`. Install them using:
+2. Create a virtual environment with system-site-packages enabled (required for GTK bindings):
 ```bash
-pip install -r requirements.txt
+python -m venv --system-site-packages venv
+
 ```
 
-## Running the Daemon
 
-Ensure you have the `face_landmarker.task` model file (for MediaPipe) and `rickroll.mp4` in the project root.
-
-Run the main daemon:
+3. Install the Python dependencies:
 ```bash
-python linux/main.py
+./venv/bin/pip install pulsectl psutil opencv-python mediapipe
+
 ```
 
-## How It Works
 
-1. **Normal State**: Normal operation. Head tracking works to adjust volume.
-2. **Heating State**: Volume > 60%. CPU/GPU stress starts to generate heat.
-3. **Warning State**: Temperature >= 85.0°C. An overlay is displayed.
-4. **Countdown/Prank State**: User ignores the warning, triggering a 10s countdown followed by an infinite Rickroll with an input-blocking screen.
+4. Download the MediaPipe Face Landmarker model:
+```bash
+wget -O face_landmarker.task [https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task](https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task)
 
-*Note: Proceed at your own risk! This script intentionally generates heat and locks your input.*
+```
+
+
+5. Place a video file named `rickroll.mp4` in the project root directory.
+6. Execute the daemon:
+```bash
+./venv/bin/python linux/main.py
+
+```
+
+
+
+## Emergency Escape Hatch
+
+If the daemon enters the `PRANK` state, standard inputs are blocked.
+
+Press **`Ctrl + Super + Alt + Space`** to trigger the kill sequence. This destroys the transparent GTK lock screen, terminates the video, kills all background stress testing, drops the volume back to 60%, and exits the daemon.
