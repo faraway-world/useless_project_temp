@@ -1,0 +1,13 @@
+NumWorkers=1
+WorkPreference=0
+CoresPerTest=4
+ComputerGUID=7703bb561a4234aa9cfe671644992540
+
+[Internals]
+OldCpuSpeed=2940
+NewCpuSpeedCount=1
+NewCpuSpeed=1603
+V30OptionsConverted=1
+WGUID_version=2
+RollingAverage=1000
+RollingStartTime=0

@@ -1,0 +1,6 @@
+key.txt
+venv/
+__pycache__/
+face_landmarker.task
+rickroll.mp4
+*.pid
