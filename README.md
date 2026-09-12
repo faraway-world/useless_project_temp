@@ -1,8 +1,8 @@
 # Thermal Volume Daemon
 
 A Linux/Wayland daemon that physically enforces system volume limits by tying audio output to CPU temperature. 
-
-If the volume gets too loud, the daemon intentionally overheats the computer using background stress tests. If the resulting thermal warnings are ignored by user, it locks all user inputs and executes[...]
+Our goal is to make people learn to not listen to stuff on high volume and we do so in a silly way.
+If the volume gets too loud, the daemon intentionally overheats the computer using background stress tests. If the resulting thermal warnings are ignored by user, it locks all user inputs and it memes you.
 
 ## Demonstration
 
